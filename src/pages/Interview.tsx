@@ -111,8 +111,9 @@ const Interview = () => {
                       .from('transcripts')
                       .insert({
                         session_id: sessionId,
-                        question_text: question,
-                        generated_answer: finalAnswer
+                        content: `Q: ${question}\nA: ${finalAnswer.answer}`,
+                        speaker: 'system',
+                        created_at: new Date().toISOString()
                       });
                   }
                 } catch (parseError) {

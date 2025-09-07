@@ -9,11 +9,13 @@ import { useToast } from "@/hooks/use-toast";
 
 interface Transcript {
   id: string;
-  question_text: string;
-  generated_answer: string;
-  timestamp: string;
   session_id: string;
+  content: string;
+  speaker: string | null;
+  timestamp_start: number | null;
+  timestamp_end: number | null;
   created_at: string;
+  updated_at: string;
 }
 
 const MobileCompanion = () => {
@@ -95,7 +97,7 @@ const MobileCompanion = () => {
               
               toast({
                 title: "New Question",
-                description: `"${newTranscript.question_text.substring(0, 50)}..."`,
+                description: `"${newTranscript.content.substring(0, 50)}..."`,
               });
             }
           )
@@ -242,7 +244,7 @@ const MobileCompanion = () => {
                   </span>
                 </div>
                 <p className="text-gray-800 font-medium leading-relaxed">
-                  "{transcript.question_text}"
+                  "{transcript.content.split('\n')[0]?.replace('Q: ', '') || transcript.content}"
                 </p>
               </div>
 
@@ -253,7 +255,7 @@ const MobileCompanion = () => {
                   <span className="text-sm font-medium text-blue-800">AI Answer</span>
                 </div>
                 <p className="text-blue-900 leading-relaxed text-sm">
-                  {transcript.generated_answer}
+                  {transcript.content.split('\n')[1]?.replace('A: ', '') || 'No answer available'}
                 </p>
               </div>
             </CardContent>

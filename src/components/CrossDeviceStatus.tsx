@@ -29,11 +29,11 @@ export const CrossDeviceStatus = ({ sessionId, deviceType, className }: CrossDev
       console.log('Registering device:', { sessionId, deviceType });
       
       try {
-        // Register device connection in session_connections table
+        // Register device connection in device_connections table
         const connectionId = `${sessionId}_${deviceType}_${Date.now()}`;
         
         const { error } = await supabase
-          .from('session_connections')
+          .from('device_connections')
           .insert({
             session_id: sessionId,
             connection_id: connectionId,
@@ -54,9 +54,9 @@ export const CrossDeviceStatus = ({ sessionId, deviceType, className }: CrossDev
 
     const fetchDevices = async () => {
       try {
-        // Get active devices from session_connections table
+        // Get active devices from device_connections table
         const { data: connections, error } = await supabase
-          .from('session_connections')
+          .from('device_connections')
           .select('*')
           .eq('session_id', sessionId)
           .gte('last_ping', new Date(Date.now() - 2 * 60 * 1000).toISOString()); // Active in last 2 minutes
