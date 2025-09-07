@@ -14,7 +14,124 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      device_connections: {
+        Row: {
+          connection_id: string
+          created_at: string
+          device_type: string
+          id: string
+          last_ping: string
+          session_id: string
+        }
+        Insert: {
+          connection_id: string
+          created_at?: string
+          device_type: string
+          id?: string
+          last_ping?: string
+          session_id: string
+        }
+        Update: {
+          connection_id?: string
+          created_at?: string
+          device_type?: string
+          id?: string
+          last_ping?: string
+          session_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "device_connections_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      interview_questions: {
+        Row: {
+          created_at: string
+          generated_answer: Json | null
+          id: string
+          question_text: string
+          session_id: string
+        }
+        Insert: {
+          created_at?: string
+          generated_answer?: Json | null
+          id?: string
+          question_text: string
+          session_id: string
+        }
+        Update: {
+          created_at?: string
+          generated_answer?: Json | null
+          id?: string
+          question_text?: string
+          session_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "interview_questions_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sessions: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          device_mode: string
+          duration_minutes: number
+          expires_at: string | null
+          id: string
+          plan_type: string
+          price_cents: number
+          started_at: string | null
+          status: string
+          stripe_payment_intent_id: string | null
+          stripe_session_id: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          device_mode?: string
+          duration_minutes?: number
+          expires_at?: string | null
+          id?: string
+          plan_type: string
+          price_cents?: number
+          started_at?: string | null
+          status?: string
+          stripe_payment_intent_id?: string | null
+          stripe_session_id?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          device_mode?: string
+          duration_minutes?: number
+          expires_at?: string | null
+          id?: string
+          plan_type?: string
+          price_cents?: number
+          started_at?: string | null
+          status?: string
+          stripe_payment_intent_id?: string | null
+          stripe_session_id?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
