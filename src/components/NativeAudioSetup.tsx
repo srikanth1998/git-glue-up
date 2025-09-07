@@ -1,10 +1,9 @@
-
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Download, CheckCircle, AlertTriangle, ExternalLink } from 'lucide-react';
+import { Download, CheckCircle, AlertTriangle } from 'lucide-react';
 import { useNativeAudio } from '@/hooks/useNativeAudio';
 
 export const NativeAudioSetup = () => {
@@ -34,14 +33,6 @@ export const NativeAudioSetup = () => {
       : 'https://jafylkqbmvdptrqwwyed.supabase.co/storage/v1/object/public/native-helpers/InterviewAce-Helper-macOS.dmg';
     
     window.open(downloadUrl, '_blank');
-  };
-
-  const installDriver = () => {
-    const driverUrl = platform === 'windows'
-      ? 'https://vb-audio.com/Cable/'
-      : 'https://github.com/ExistentialAudio/BlackHole';
-    
-    window.open(driverUrl, '_blank');
   };
 
   if (platform === 'unknown') {
