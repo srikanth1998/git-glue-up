@@ -1,0 +1,24 @@
+directories:
+  output: releases
+  buildResources: build
+appId: com.interviewace.helper
+productName: InterviewAce Helper
+files:
+  - filter:
+      - dist/**/*
+      - node_modules/**/*
+      - build/Release/*.node
+win:
+  target:
+    - portable
+    - nsis
+  icon: assets/icon.ico
+mac:
+  target: dmg
+  icon: assets/icon.icns
+  category: public.app-category.productivity
+nsis:
+  oneClick: true
+  perMachine: false
+  allowElevation: false
+electronVersion: 28.3.3
