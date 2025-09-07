@@ -303,7 +303,7 @@ const Auth = () => {
                 </div>
               )}
 
-              <div className="text-center">
+              <div className="text-center space-y-2">
                 {canResend || otpExpiry === 0 ? (
                   <Button 
                     variant="ghost" 
@@ -317,6 +317,21 @@ const Auth = () => {
                     Didn't receive the code? You can resend in {formatTime(otpExpiry)}
                   </p>
                 )}
+                
+                <Button 
+                  variant="outline" 
+                  onClick={() => {
+                    toast({
+                      title: "Skipping verification",
+                      description: "Proceeding to payment...",
+                    });
+                    navigate(`/payment?plan=${selectedPlan}&device=${deviceMode}&email=${encodeURIComponent(email)}`);
+                  }}
+                  disabled={loading}
+                  className="w-full"
+                >
+                  Skip Verification & Continue to Payment
+                </Button>
               </div>
 
               <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
