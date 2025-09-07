@@ -424,6 +424,29 @@ const Auth = () => {
                   </>
                 )}
               </Button>
+
+              <Button 
+                type="button"
+                variant="outline"
+                className="w-full h-12 text-lg mt-2"
+                onClick={() => {
+                  if (!email) {
+                    toast({
+                      title: "Email required",
+                      description: "Please enter your email address first.",
+                      variant: "destructive"
+                    });
+                    return;
+                  }
+                  toast({
+                    title: "Skipping verification",
+                    description: "Proceeding directly to payment...",
+                  });
+                  navigate(`/payment?plan=${selectedPlan}&device=${deviceMode}&email=${encodeURIComponent(email)}`);
+                }}
+              >
+                Skip Verification & Go to Payment
+              </Button>
             </form>
 
             <div className="mt-6 text-center">
