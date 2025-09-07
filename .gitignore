@@ -1,1 +1,13 @@
 node_modules
+
+# Large executable files
+native-helper/releases/*.exe
+native-helper/releases/win-unpacked/*.exe
+
+# Build artifacts
+dist/
+build/
+
+# OS files
+.DS_Store
+Thumb.db
