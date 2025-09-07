@@ -132,6 +132,47 @@ export type Database = {
         }
         Relationships: []
       }
+      transcripts: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          session_id: string
+          speaker: string | null
+          timestamp_end: number | null
+          timestamp_start: number | null
+          updated_at: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          session_id: string
+          speaker?: string | null
+          timestamp_end?: number | null
+          timestamp_start?: number | null
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          session_id?: string
+          speaker?: string | null
+          timestamp_end?: number | null
+          timestamp_start?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transcripts_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
