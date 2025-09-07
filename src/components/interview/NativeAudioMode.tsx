@@ -7,10 +7,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Mic, MicOff, Settings, CheckCircle, AlertTriangle } from 'lucide-react';
 import { useNativeAudio } from '@/hooks/useNativeAudio';
 import { NativeAudioSetup } from '@/components/NativeAudioSetup';
-<<<<<<< HEAD
-=======
 import { supabase } from '@/integrations/supabase/client';
->>>>>>> 803b9ff525c2282fe6eeedb4b0dc1aace7c61c03
 
 interface NativeAudioModeProps {
   sessionId: string | null;
@@ -24,10 +21,6 @@ export const NativeAudioMode = ({ sessionId, onTranscriptionReceived }: NativeAu
   const handleToggleCapture = async () => {
     if (!session || session.status === 'idle') {
       try {
-<<<<<<< HEAD
-        // In a real implementation, you'd get the JWT from your auth system
-        const jwt = 'your-session-jwt-here';
-=======
         // Get JWT from Supabase auth
         const { data: { session: authSession } } = await supabase.auth.getSession();
         const jwt = authSession?.access_token || '';
@@ -36,7 +29,6 @@ export const NativeAudioMode = ({ sessionId, onTranscriptionReceived }: NativeAu
           throw new Error('No authentication token available');
         }
         
->>>>>>> 803b9ff525c2282fe6eeedb4b0dc1aace7c61c03
         await startCapture(jwt);
       } catch (error) {
         console.error('Failed to start capture:', error);
@@ -151,15 +143,9 @@ export const NativeAudioMode = ({ sessionId, onTranscriptionReceived }: NativeAu
         )}
 
         <div className="text-xs text-gray-400 space-y-1">
-<<<<<<< HEAD
-          <p>• Captures system audio via virtual driver</p>
-          <p>• No browser permissions required</p>
-          <p>• Works with any meeting platform</p>
-=======
           <p>• Direct system audio capture via {capabilities.systemAudio?.method || 'native APIs'}</p>
           <p>• No virtual drivers or browser permissions required</p>
           <p>• Works with any meeting platform or application</p>
->>>>>>> 803b9ff525c2282fe6eeedb4b0dc1aace7c61c03
         </div>
 
         {showSetup && <NativeAudioSetup />}

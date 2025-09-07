@@ -1,20 +1,13 @@
-
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useToast } from '@/hooks/use-toast';
 
 interface NativeAudioCapabilities {
   available: boolean;
   version?: string;
-<<<<<<< HEAD
-  drivers: {
-    windows: boolean; // VB-Cable/WASAPI
-    macos: boolean;   // BlackHole
-=======
   platform: string;
   systemAudio: {
     available: boolean;
     method: string; // WASAPI or CoreAudio
->>>>>>> 803b9ff525c2282fe6eeedb4b0dc1aace7c61c03
   };
 }
 
@@ -25,12 +18,6 @@ interface CaptureSession {
   error?: string;
 }
 
-<<<<<<< HEAD
-export const useNativeAudio = (sessionId: string | null) => {
-  const [capabilities, setCapabilities] = useState<NativeAudioCapabilities>({
-    available: false,
-    drivers: { windows: false, macos: false }
-=======
 // Supabase configuration - these should match your actual config
 const SUPABASE_CONFIG = {
   url: 'https://jafylkqbmvdptrqwwyed.supabase.co',
@@ -42,7 +29,6 @@ export const useNativeAudio = (sessionId: string | null) => {
     available: false,
     platform: 'unknown',
     systemAudio: { available: false, method: 'none' }
->>>>>>> 803b9ff525c2282fe6eeedb4b0dc1aace7c61c03
   });
   const [session, setSession] = useState<CaptureSession | null>(null);
   const [isConnected, setIsConnected] = useState(false);
@@ -52,36 +38,6 @@ export const useNativeAudio = (sessionId: string | null) => {
   // Check if native helper is available
   const checkNativeHelper = useCallback(async () => {
     try {
-<<<<<<< HEAD
-      // Check Rust native helper via HTTP ping
-      const response = await fetch('http://localhost:4580/ping', {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' }
-      });
-      
-      if (response.ok) {
-        console.log('✅ Rust native helper detected');
-        setCapabilities({
-          available: true,
-          version: '1.0.0-rust',
-          drivers: {
-            windows: navigator.platform.includes('Win'),
-            macos: navigator.platform.includes('Mac')
-          }
-        });
-        return true;
-      }
-      
-      // Fallback: Check if Electron preload API is available
-      if (typeof window !== 'undefined' && (window as any).nativeAudio) {
-        const caps = await (window as any).nativeAudio.getCapabilities();
-        setCapabilities(caps);
-        return caps.available;
-      }
-      
-      console.warn('❌ No native helper detected');
-      return false;
-=======
       // Try to connect to Electron native helper on port 8765
       const ws = new WebSocket('ws://localhost:8765');
       
@@ -133,28 +89,12 @@ export const useNativeAudio = (sessionId: string | null) => {
           clearTimeout(timeout);
         };
       });
->>>>>>> 803b9ff525c2282fe6eeedb4b0dc1aace7c61c03
     } catch (error) {
       console.error('Native helper check failed:', error);
       return false;
     }
   }, []);
 
-<<<<<<< HEAD
-  // Connect to native helper (Rust version uses HTTP, not WebSocket)
-  const connectToHelper = useCallback(async () => {
-    if (isConnected) return;
-
-    try {
-      // Test connection to Rust helper
-      const response = await fetch('http://localhost:4580/ping');
-      if (response.ok) {
-        console.log('✅ Connected to Rust native helper');
-        setIsConnected(true);
-      } else {
-        throw new Error('Helper not responding');
-      }
-=======
   // Connect to native helper
   const connectToHelper = useCallback(async () => {
     if (isConnected || wsRef.current) return;
@@ -191,7 +131,6 @@ export const useNativeAudio = (sessionId: string | null) => {
         wsRef.current = null;
       };
 
->>>>>>> 803b9ff525c2282fe6eeedb4b0dc1aace7c61c03
     } catch (error) {
       console.error('Failed to connect to native helper:', error);
       setIsConnected(false);
@@ -200,12 +139,6 @@ export const useNativeAudio = (sessionId: string | null) => {
 
   // Handle messages from native helper
   const handleHelperMessage = useCallback((data: any) => {
-<<<<<<< HEAD
-    switch (data.type) {
-      case 'captureStatus':
-        setSession(prev => prev ? { ...prev, status: data.status } : null);
-        break;
-=======
     console.log('📨 Helper message:', data);
     
     switch (data.type) {
@@ -234,7 +167,6 @@ export const useNativeAudio = (sessionId: string | null) => {
         }
         break;
         
->>>>>>> 803b9ff525c2282fe6eeedb4b0dc1aace7c61c03
       case 'error':
         setSession(prev => prev ? { ...prev, status: 'error', error: data.message } : null);
         toast({
@@ -243,10 +175,6 @@ export const useNativeAudio = (sessionId: string | null) => {
           variant: "destructive"
         });
         break;
-<<<<<<< HEAD
-      case 'audioData':
-        // Audio data is handled by the native helper and sent directly to Supabase
-=======
         
       case 'overlayStatus':
         console.log('Overlay status:', data.visible ? 'shown' : 'hidden');
@@ -254,18 +182,13 @@ export const useNativeAudio = (sessionId: string | null) => {
         
       case 'overlayUpdated':
         console.log('Overlay content updated');
->>>>>>> 803b9ff525c2282fe6eeedb4b0dc1aace7c61c03
         break;
     }
   }, [toast]);
 
   // Start audio capture
   const startCapture = useCallback(async (jwt: string) => {
-<<<<<<< HEAD
-    if (!sessionId || !isConnected) {
-=======
     if (!sessionId || !isConnected || !wsRef.current) {
->>>>>>> 803b9ff525c2282fe6eeedb4b0dc1aace7c61c03
       throw new Error('Native helper not available');
     }
 
@@ -276,24 +199,6 @@ export const useNativeAudio = (sessionId: string | null) => {
     });
 
     try {
-<<<<<<< HEAD
-      // Call Rust helper's /start endpoint
-      const response = await fetch('http://localhost:4580/start', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          sessionId,
-          jwt
-        })
-      });
-
-      if (response.ok) {
-        console.log('✅ Started audio capture');
-        setSession(prev => prev ? { ...prev, status: 'active' } : null);
-      } else {
-        throw new Error('Failed to start capture');
-      }
-=======
       // Send start capture command to native helper
       wsRef.current.send(JSON.stringify({
         action: 'startCapture',
@@ -304,7 +209,6 @@ export const useNativeAudio = (sessionId: string | null) => {
 
       console.log('📤 Sent start capture command');
       
->>>>>>> 803b9ff525c2282fe6eeedb4b0dc1aace7c61c03
     } catch (error) {
       console.error('❌ Failed to start capture:', error);
       setSession(prev => prev ? { ...prev, status: 'error', error: error.message } : null);
@@ -314,29 +218,11 @@ export const useNativeAudio = (sessionId: string | null) => {
 
   // Stop audio capture
   const stopCapture = useCallback(async () => {
-<<<<<<< HEAD
-    if (!session) return;
-=======
     if (!session || !wsRef.current) return;
->>>>>>> 803b9ff525c2282fe6eeedb4b0dc1aace7c61c03
 
     setSession(prev => prev ? { ...prev, status: 'stopping' } : null);
     
     try {
-<<<<<<< HEAD
-      // Call Rust helper's /stop endpoint
-      const response = await fetch('http://localhost:4580/stop', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
-      });
-
-      if (response.ok) {
-        console.log('✅ Stopped audio capture');
-        setSession(null);
-      } else {
-        throw new Error('Failed to stop capture');
-      }
-=======
       // Send stop capture command to native helper
       wsRef.current.send(JSON.stringify({
         action: 'stopCapture'
@@ -344,15 +230,12 @@ export const useNativeAudio = (sessionId: string | null) => {
 
       console.log('📤 Sent stop capture command');
       
->>>>>>> 803b9ff525c2282fe6eeedb4b0dc1aace7c61c03
     } catch (error) {
       console.error('❌ Failed to stop capture:', error);
       setSession(prev => prev ? { ...prev, status: 'error', error: error.message } : null);
     }
   }, [session]);
 
-<<<<<<< HEAD
-=======
   // Show/hide overlay
   const showOverlay = useCallback(() => {
     if (wsRef.current) {
@@ -386,7 +269,6 @@ export const useNativeAudio = (sessionId: string | null) => {
     };
   }, []);
 
->>>>>>> 803b9ff525c2282fe6eeedb4b0dc1aace7c61c03
   // Initialize on mount
   useEffect(() => {
     const initialize = async () => {
@@ -405,13 +287,9 @@ export const useNativeAudio = (sessionId: string | null) => {
     session,
     startCapture,
     stopCapture,
-<<<<<<< HEAD
-    checkNativeHelper
-=======
     checkNativeHelper,
     showOverlay,
     hideOverlay,
     updateOverlay
->>>>>>> 803b9ff525c2282fe6eeedb4b0dc1aace7c61c03
   };
 };
