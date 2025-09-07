@@ -281,6 +281,30 @@ const Payment = () => {
               </>
             )}
           </Button>
+
+          {/* Skip Payment Button */}
+          <Button 
+            type="button"
+            variant="outline"
+            className="w-full py-6 text-lg mt-4"
+            onClick={() => {
+              if (!email || !email.includes('@')) {
+                toast({
+                  title: "Email required",
+                  description: "Please enter your email address first.",
+                  variant: "destructive"
+                });
+                return;
+              }
+              toast({
+                title: "Skipping payment",
+                description: "Proceeding to your session setup...",
+              });
+              navigate(`/upload?plan=${planType}&device=${deviceMode}&email=${encodeURIComponent(email)}`);
+            }}
+          >
+            Skip Payment & Continue to Session Setup
+          </Button>
         </form>
       </div>
     </div>
